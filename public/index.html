@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Welcome to the Bookstore</h1>
+
+<div class="container" id="book-container">
+</div>
+
+<!-- Form to add a new book -->
+<div class="add-book-form">
+    <h2>Add New Book</h2>
+    <form id="book-form">
+        <input type="text" id="title" placeholder="Title" required>
+        <input type="text" id="author" placeholder="Author" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="text" id="image" placeholder="Image URL" required>
+        <button class="btn" type="submit">Add Book</button>
+    </form>
+</div>
+<div class="delete-book-form">
+    <h2>Delete Book</h2>
+    <form id="delete-book-form">
+        <input type="text" id="delete-id" placeholder="Book ID to Delete" required>
+        <button class="btn delete-btn" type="submit">Delete Book</button>
+    </form>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
