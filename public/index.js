@@ -55,7 +55,7 @@ bookForm.addEventListener('submit', async (e) => {
 
 deleteBookForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const bookNameToDelete = document.getElementById('delete-id').value;
+    const bookNameToDelete = encodeURIComponent(document.getElementById('delete-id').value); // Encode the book name
 
     try {
         const response = await fetch(`/books/${bookNameToDelete}`, {
@@ -64,9 +64,7 @@ deleteBookForm.addEventListener('submit', async (e) => {
         if (!response.ok) {
             throw new Error('Failed to delete the book');
         }
-        // Clear the form after deleting the book
         deleteBookForm.reset();
-        // Fetch and display updated book data
         await fetchBooks();
     } catch (error) {
         console.error(error);

@@ -1,5 +1,5 @@
 const bookService = require('../services/bookService');
-const { body, validationResult } = require('express-validator');
+const {validationResult, body} = require("express-validator");
 
 exports.getAllBooks = async (req, res) => {
     try {
@@ -36,7 +36,6 @@ exports.createBook = [
         }
         next();
     },
-
     async (req, res) => {
         try {
             const { title, author, description, image } = req.body; // Corrected
@@ -47,6 +46,20 @@ exports.createBook = [
         }
     }
 ];
+
+// exports.createBook = async (req, res) => {
+//     const { title, author, description, image } = req.body;
+//     if (!title || !author || !description || !image) {
+//         return res.status(400).json({ error: 'All fields are required' });
+//     }
+//
+//     try {
+//         const newBook = await bookService.createBook({ title, author, description, image });
+//         res.status(201).json(newBook);
+//     } catch (err) {
+//         res.status(500).json({ error: 'Unable to create the book' });
+//     }
+// };
 
 exports.updateBook = async (req, res) => {
     const { title } = req.params;
@@ -66,7 +79,6 @@ exports.updateBook = async (req, res) => {
 
 exports.deleteBook = async (req, res) => {
     const { name } = req.params;
-
     try {
         const deletedBook = await bookService.deleteBook(name);
         if (!deletedBook) {

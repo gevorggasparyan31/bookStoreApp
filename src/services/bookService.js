@@ -34,5 +34,5 @@ exports.updateBook = async ( title, newData ) => {
 };
 
 exports.deleteBook = async (name) => {
-    return Book.findOneAndDelete({ title: name });
+    return Book.deleteOne({ title: name });
 };
