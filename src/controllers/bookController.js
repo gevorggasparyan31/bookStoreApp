@@ -3,7 +3,8 @@ const {validationResult} = require("express-validator");
 
 exports.getAllBooks = async (req, res) => {
     try {
-        const books = await bookService.getAllBooks();
+        const userId = req.user.userId;
+        const books = await bookService.getAllBooks(userId);
         res.json(books);
     } catch (err) {
         res.status(500).json({ error: 'Unable to fetch books' });
@@ -30,9 +31,9 @@ exports.createBook = async (req, res) => {
     }
 
     try {
-        const {title, author, description, image} = req.body;
-        const newBook = await bookService.createBook({ title, author, description, image });
-        res.status(201).json(newBook);
+        const { title, author, description, image, userId } = req.body;
+        const newBook = await bookService.createBook({ title, author, description, image, userId });
+        res.status(201).json("Book is created");
     } catch (err) {
         res.status(500).json({ error: 'Unable to create the book' });
     }

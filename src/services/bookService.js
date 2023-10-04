@@ -1,19 +1,20 @@
 const Book = require('../models/bookModel');
 
-exports.getAllBooks = async () => {
-    return Book.find();
+exports.getAllBooks = async (userId) => {
+    return Book.find({ userId });
 };
 
 exports.getBookById = async (id) => {
     return Book.findById(id);
 };
 
-exports.createBook = async ({ title, author, description, image }) => {
+exports.createBook = async ({ title, author, description, image,userId}) => {
     const newBook = new Book({
         title,
         author,
         description,
         image,
+        userId,
     });
     return newBook.save();
 };

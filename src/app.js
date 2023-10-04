@@ -3,7 +3,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.static('public'));
-app.use('/', require('./routes/bookRoutes'));
+app.use('/books', require('./routes/bookRoutes'));
+app.use('/users', require('./routes/userRoutes'));
 require('./config/db');
 
 const PORT = process.env.PORT || 3000;
