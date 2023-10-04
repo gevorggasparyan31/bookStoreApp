@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginButton = document.getElementById("login-button");
     const bookList = document.getElementById("book-items");
 
-    // Register a new user
     registerButton.addEventListener("click", async () => {
         const username = document.getElementById("register-username").value;
         const password = document.getElementById("register-password").value;
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Login as a user
     loginButton.addEventListener("click", async () => {
         const username = document.getElementById("login-username").value;
         const password = document.getElementById("login-password").value;
@@ -56,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Load books for the logged-in user
     const loadBooks = async () => {
         const token = localStorage.getItem("token");
 
@@ -83,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Render the list of books
     const renderBooks = (books) => {
         const bookItems = document.getElementById("book-items");
         bookItems.innerHTML = "";
@@ -95,7 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // Check if the user is already logged in and load their books
     const token = localStorage.getItem("token");
     if (token) {
         loadBooks();
