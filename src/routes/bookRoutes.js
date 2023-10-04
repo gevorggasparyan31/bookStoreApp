@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/bookController');
-const { validateData } = require('../middlewares/updateMiddleware')
+const { validateData } = require('../validations/bookValidation')
 
 router.get('/books', bookController.getAllBooks);
 router.get('/books/:id', bookController.getBookById);

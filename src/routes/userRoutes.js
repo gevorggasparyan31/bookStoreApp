@@ -1,13 +1,6 @@
-const User = require("../models/userModel");
+const { validateData } = require('../validations/userValidation');
+const userController = require('../controllers/userController');
+const express = require('express');
+const router = express.Router();
 
-exports.createUser = async (userData) => {
-
-}
-
-exports.getUserById = async (userId) => {
-
-}
-
-exports.deleteUser = async (userId) => {
-
-}
+router.get('/users');
