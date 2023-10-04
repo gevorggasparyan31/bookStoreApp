@@ -1,74 +1,103 @@
-const bookContainer = document.getElementById('book-container');
-const bookForm = document.getElementById('book-form');
-const deleteBookForm = document.getElementById('delete-book-form');
-async function fetchBooks() {
-    try {
-        const response = await fetch('/books');
-        if (!response.ok) {
-            throw new Error('Failed to fetch books');
-        }
-        const books = await response.json();
-        renderBooks(books);
-    } catch (error) {
-        console.error(error);
-    }
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const registerButton = document.getElementById("register-button");
+    const loginButton = document.getElementById("login-button");
+    const bookList = document.getElementById("book-items");
 
-function renderBooks(books) {
-    bookContainer.innerHTML = '';
-    books.forEach((book) => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = `
-                    <img src="${book.image}" alt="Book Cover">
-                    <h2>${book.title}</h2>
-                    <p>${book.description}</p>
-                `;
-        bookContainer.appendChild(card);
+    // Register a new user
+    registerButton.addEventListener("click", async () => {
+        const username = document.getElementById("register-username").value;
+        const password = document.getElementById("register-password").value;
+
+        try {
+            const response = await fetch("/users/newUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.status === 201) {
+                alert("User registered successfully.");
+            } else {
+                alert("Failed to register user.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred.");
+        }
     });
-}
 
-bookForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('title').value;
-    const author = document.getElementById('author').value;
-    const description = document.getElementById('description').value;
-    const image = document.getElementById('image').value;
+    // Login as a user
+    loginButton.addEventListener("click", async () => {
+        const username = document.getElementById("login-username").value;
+        const password = document.getElementById("login-password").value;
 
-    try {
-        const response = await fetch('/books', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ title, author, description, image }),
-        });
-        if (!response.ok) {
-            throw new Error('Failed to add a new book');
+        try {
+            const response = await fetch("/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (response.status === 200) {
+                const { token } = await response.json();
+                localStorage.setItem("token", token);
+                alert("Logged in successfully.");
+                loadBooks();
+            } else {
+                alert("Login failed.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred.");
         }
-        bookForm.reset();
-        await fetchBooks();
-    } catch (error) {
-        console.error(error);
+    });
+
+    // Load books for the logged-in user
+    const loadBooks = async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return;
+        }
+
+        try {
+            const response = await fetch("/books", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                const books = await response.json();
+                renderBooks(books);
+            } else {
+                alert("Failed to load books.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred.");
+        }
+    };
+
+    // Render the list of books
+    const renderBooks = (books) => {
+        const bookItems = document.getElementById("book-items");
+        bookItems.innerHTML = "";
+
+        books.forEach((book) => {
+            const li = document.createElement("li");
+            li.textContent = book.title;
+            bookItems.appendChild(li);
+        });
+    };
+
+    // Check if the user is already logged in and load their books
+    const token = localStorage.getItem("token");
+    if (token) {
+        loadBooks();
     }
 });
-
-deleteBookForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const bookNameToDelete = encodeURIComponent(document.getElementById('delete-id').value); // Encode the book name
-
-    try {
-        const response = await fetch(`/books/${bookNameToDelete}`, {
-            method: 'DELETE',
-        });
-        if (!response.ok) {
-            throw new Error('Failed to delete the book');
-        }
-        deleteBookForm.reset();
-        await fetchBooks();
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-fetchBooks();
