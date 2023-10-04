@@ -1,5 +1,5 @@
 const bookService = require('../services/bookService');
-const {validationResult, body} = require("express-validator");
+const {validationResult} = require("express-validator");
 
 exports.getAllBooks = async (req, res) => {
     try {
@@ -22,25 +22,6 @@ exports.getBookById = async (req, res) => {
         res.status(500).json({ error: 'Unable to fetch the book' });
     }
 };
-
-// exports.createBook = async (req,res) => {
-//     (req, res, next) => {
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             return res.status(400).json({errors: errors.array()});
-//         }
-//         next();
-//     },
-//         async (req, res) => {
-//             try {
-//                 const {title, author, description, image} = req.body; // Corrected
-//                 const newBook = await bookService.createBook({title, author, description, image});
-//                 res.status(201).json(newBook);
-//             } catch (err) {
-//                 res.status(500).json({error: 'Unable to create the book'});
-//             }
-//         }
-// };
 
 exports.createBook = async (req, res) => {
     const errors = validationResult(req);
