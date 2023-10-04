@@ -23,43 +23,39 @@ exports.getBookById = async (req, res) => {
     }
 };
 
-exports.createBook = [
-    body('title').notEmpty(),
-    body('author').notEmpty(),
-    body('description').notEmpty(),
-    body('image').notEmpty(),
-
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    },
-    async (req, res) => {
-        try {
-            const { title, author, description, image } = req.body; // Corrected
-            const newBook = await bookService.createBook({ title, author, description, image });
-            res.status(201).json(newBook);
-        } catch (err) {
-            res.status(500).json({ error: 'Unable to create the book' });
-        }
-    }
-];
-
-// exports.createBook = async (req, res) => {
-//     const { title, author, description, image } = req.body;
-//     if (!title || !author || !description || !image) {
-//         return res.status(400).json({ error: 'All fields are required' });
-//     }
-//
-//     try {
-//         const newBook = await bookService.createBook({ title, author, description, image });
-//         res.status(201).json(newBook);
-//     } catch (err) {
-//         res.status(500).json({ error: 'Unable to create the book' });
-//     }
+// exports.createBook = async (req,res) => {
+//     (req, res, next) => {
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             return res.status(400).json({errors: errors.array()});
+//         }
+//         next();
+//     },
+//         async (req, res) => {
+//             try {
+//                 const {title, author, description, image} = req.body; // Corrected
+//                 const newBook = await bookService.createBook({title, author, description, image});
+//                 res.status(201).json(newBook);
+//             } catch (err) {
+//                 res.status(500).json({error: 'Unable to create the book'});
+//             }
+//         }
 // };
+
+exports.createBook = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+
+    try {
+        const {title, author, description, image} = req.body;
+        const newBook = await bookService.createBook({ title, author, description, image });
+        res.status(201).json(newBook);
+    } catch (err) {
+        res.status(500).json({ error: 'Unable to create the book' });
+    }
+};
 
 exports.updateBook = async (req, res) => {
     const { title } = req.params;
