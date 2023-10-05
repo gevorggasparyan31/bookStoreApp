@@ -8,7 +8,7 @@
     "start": "node ./src/app.js",
     "start-mongodb": "chmod +x start-mongodb.sh && ./start-mongodb.sh"
   },
-  "author": "",
+  "author": "gev.org",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
