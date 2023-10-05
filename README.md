@@ -10,9 +10,7 @@ users are done using JWT, passwords in database are saved in encrypted code.
 ```
 - Run the MongoDB 
 ```shell
-    chmod +x start-mongodb.sh
+    npm run start-mongodb
 ```
-```shell
-    ./start-mongodb.sh
-```
+
 App will run on [local port 3000](http://localhost:3000/).
