@@ -7,6 +7,7 @@ exports.createUser = async (req, res) => {
     try {
         const userData = req.body;
         const newUser = await userService.createUser(userData);
+
         return res.status(201).json(newUser);
     } catch (error) {
         return res.status(500).json({error: 'Failed to create user'});
@@ -16,6 +17,7 @@ exports.createUser = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
     try{
         const users = await userService.getAllUsers();
+
         return res.status(201).json(users);
     } catch (error) {
         return res.status(500).json({error: 'Failed to find user'});
@@ -30,8 +32,7 @@ exports.login = async (req, res) => {
 
         if (!user) {
             return res.status(401).json({ message: 'No user found' });
-        }
-        else if (!(await bcrypt.compare(password, user.password))) {
+        } else if (!(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: 'Wrong password' });
         }
 
