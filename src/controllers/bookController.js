@@ -60,6 +60,7 @@ exports.deleteBook = async (req, res) => {
     try {
         const deletedBook = await bookService.deleteBook(name);
         if (!deletedBook) {
+            console.log("name:",name)
             return res.status(404).json({ error: 'Book not found' });
         }
         res.json({ message: 'Book deleted successfully' });
