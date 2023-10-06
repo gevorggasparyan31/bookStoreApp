@@ -45,3 +45,22 @@ exports.login = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+exports.activation = async (req, res) => {
+    try {
+        const { activationToken } = req.params;
+
+        const user = await User.findOne({ activationLink: activationToken });
+
+        if (!user) {
+            return res.status(404).json({ error: 'Invalid activation token' });
+        }
+
+        user.isActivated = true;
+        await user.save();
+
+        res.json({ message: 'Account activated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'An error occurred during activation' });
+    }
+}

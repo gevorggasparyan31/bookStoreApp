@@ -25,7 +25,7 @@ exports.updateBook = async ( title, newData ) => {
         const updatedBook = await Book.findOneAndUpdate(filter, newData, { new: true });
 
         if (!updatedBook) {
-            return null
+            return null;
         }
 
         return updatedBook;

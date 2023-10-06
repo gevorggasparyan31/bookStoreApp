@@ -99,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-
     const addBook = async (bookData) => {
         const token = localStorage.getItem("token");
 
@@ -165,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     if (token) {
         loadBooks().then(r => {
-            console.log("token is saved in local storage")});
+            console.log("token is saved in local storage",r)});
     }
 });
 

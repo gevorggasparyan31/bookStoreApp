@@ -4,11 +4,8 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     email: String,
-    role: {
-        type: String,
-        enum: ['admin', 'user'],
-        default: 'user',
-    },
+    isActivated: {type: Boolean, default: false},
+    activationLink: String
 });
 
 module.exports = mongoose.model('User', userSchema);
