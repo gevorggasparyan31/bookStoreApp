@@ -24,20 +24,33 @@ exports.getBookById = async (req, res) => {
     }
 };
 
+// exports.createBook = async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.status(400).json({errors: errors.array()});
+//     }
+//
+//     try {
+//         const { title, author, description, image, userId } = req.body;
+//         const newBook = await bookService.createBook({ title, author, description, image, userId });
+//         res.status(201).json("Book is created");
+//     } catch (err) {
+//         res.status(500).json({ error: 'Unable to create the book' });
+//     }
+// };
 exports.createBook = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
-
     try {
-        const { title, author, description, image, userId } = req.body;
-        const newBook = await bookService.createBook({ title, author, description, image, userId });
-        res.status(201).json("Book is created");
+        const { title, author, description, image } = req.body;
+        const newBook = await bookService.createBook({ title, author, description, image });
+        res.status(201).json({ message: 'Book is created', newBook });
     } catch (err) {
+        console.error(err);
         res.status(500).json({ error: 'Unable to create the book' });
     }
 };
+
+
+
 
 exports.updateBook = async (req, res) => {
     const { title } = req.params;

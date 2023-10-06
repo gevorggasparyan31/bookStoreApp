@@ -2,20 +2,20 @@ const User = require('../models/userModel');
 const bcrypt = require("bcrypt");
 const mailService = require('nodemailer');
 const uuid = require('uuid');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const transporter = mailService.createTransport({
     service:"gmail",
-    host: "smtp.gmail.com",
-    port: 587,
     secure: false,
     auth: {
-        user: 'process.env.SENDER',
+        user: process.env.SENDER,
         pass: process.env.PASS,
     },
 });
 
 exports.getAllUsers = async () => {
-    return User.find();
+    return User.find({}, {password: 0, activationLink: 0});
 }
 
 exports.createUser = async (userData) => {
@@ -41,11 +41,13 @@ exports.createUser = async (userData) => {
         await user.save();
 
         const mailOptions = {
-            from: "localhostbookstore@gmail.com",
+            from: process.env.SENDER,
             to: user.email,
             subject: 'Activate your account',
-            text: activationLink,
+            text:`http://localhost:3000/users/activate/${activationLink}`,
         };
+
+        console.log(mailOptions);
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

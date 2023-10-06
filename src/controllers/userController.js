@@ -15,6 +15,7 @@ exports.createUser = async (req, res) => {
 }
 
 exports.getAllUsers = async (req, res) => {
+
     try{
         const users = await userService.getAllUsers();
 
@@ -36,7 +37,7 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Wrong password' });
         }
 
-        const token = jwt.sign({ userId: user._id, username: user.username }, 'your_secret_key_here', {
+        const token = jwt.sign({ userId: user._id, username: user.username, isActivated: user.isActivated }, 'your_secret_key_here', {
             expiresIn: '1h',
         });
 
