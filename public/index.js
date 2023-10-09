@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     registerButton.addEventListener("click", async () => {
         const username = document.getElementById("register-username").value;
         const password = document.getElementById("register-password").value;
+        const email = document.getElementById("activation-email").value;
 
         try {
             const response = await fetch("/users/newUser", {
@@ -40,11 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password, email }),
             });
 
             if (response.status === 201) {
-                alert("User registered successfully.");
+                alert("User registered successfully. Activation email sent.");
             } else {
                 alert("Failed to register user.");
             }
@@ -166,44 +167,45 @@ document.addEventListener("DOMContentLoaded", () => {
         loadBooks().then(r => {
             console.log("token is saved in local storage",r)});
     }
-});
 
-const deleteBook = async (bookTitle) => {
-    const token = localStorage.getItem("token");
+    const deleteBook = async (bookTitle) => {
+        const token = localStorage.getItem("token");
 
-    if (!token) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`/books/${bookTitle}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (response.status === 200) {
-            alert("Book deleted successfully.");
-        } else if (response.status === 404) {
-            alert("Book not found.");
-        } else {
-            alert("Failed to delete the book.");
+        if (!token) {
+            return;
         }
-    } catch (error) {
-        console.error(error);
-        alert("An error occurred.");
-    }
-};
 
-bookList.addEventListener("click", async (event) => {
-    if (event.target.classList.contains("delete-button")) {
-        const bookTitle = event.target.dataset.title;
-        const confirmDelete = confirm(`Are you sure you want to delete "${bookTitle}"?`);
+        try {
+            const response = await fetch(`/books/${bookTitle}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-        if (confirmDelete) {
-            await deleteBook(bookTitle);
+            if (response.status === 200) {
+                await loadBooks();
+                alert("Book deleted successfully.");
+            } else if (response.status === 404) {
+                alert("Book not found.");
+            } else {
+                alert("Failed to delete the book.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred.");
         }
-    }
-});
+    };
 
+    bookList.addEventListener("click", async (event) => {
+        if (event.target.classList.contains("delete-button")) {
+            const bookTitle = event.target.dataset.title;
+            const confirmDelete = confirm(`Are you sure you want to delete "${bookTitle}"?`);
+
+            if (confirmDelete) {
+                await deleteBook(bookTitle);
+            }
+        }
+    });
+
+});
