@@ -60,14 +60,20 @@ document.addEventListener("DOMContentLoaded", () => {
         bookItems.innerHTML = "";
 
         books.forEach((book) => {
+
             const li = document.createElement("li");
             li.textContent = book.title;
+            const img = document.createElement("img");
+            img.src = book.image;
+            img.style.width = "200px";
+            img.style.height = "auto"
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
             deleteButton.classList.add("delete-button");
             deleteButton.dataset.title = book.title;
 
+            li.appendChild(img);
             li.appendChild(deleteButton);
             bookItems.appendChild(li);
         });
@@ -138,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const bookAuthor = document.getElementById("book-author").value;
         const bookDescription = document.getElementById("book-description").value;
         const bookImage = document.getElementById("book-image").value;
-        const userId = document.getElementById("userId").value;
 
         if (bookTitle.trim() === "") {
             alert("Please enter a book title.");
@@ -149,8 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
             title: bookTitle,
             author: bookAuthor,
             description: bookDescription,
-            image: bookImage,
-            userId: userId
+            image: bookImage
         };
 
         await addBook(bookData);
@@ -159,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("book-author").value = "";
         document.getElementById("book-description").value = "";
         document.getElementById("book-image").value = "";
-        document.getElementById("userId").value = "";
     });
 
     const token = localStorage.getItem("token");
