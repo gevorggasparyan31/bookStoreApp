@@ -13,7 +13,6 @@ const checkUserActivation = async (req, res, next) => {
 
         const userId = decoded.userId;
 
-        // Assuming you have a User model
         const user = await User.findById(userId);
 
         if (!user.isActivated) {

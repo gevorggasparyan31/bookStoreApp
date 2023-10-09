@@ -8,12 +8,13 @@ exports.getBookById = async (id) => {
     return Book.findById(id);
 };
 
-exports.createBook = async ({ title, author, description, image}) => {
+exports.createBook = async ({ title, author, description, image, userId}) => {
     const newBook = new Book({
         title,
         author,
         description,
-        image
+        image,
+        userId
     });
     return newBook.save();
 };

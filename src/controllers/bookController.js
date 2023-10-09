@@ -1,9 +1,10 @@
 const bookService = require('../services/bookService');
-const {validationResult} = require("express-validator");
+const jwt = require('jsonwebtoken');
 
 exports.getAllBooks = async (req, res) => {
     try {
         const userId = req.user.userId;
+        console.log('User ID:', userId);
         const books = await bookService.getAllBooks(userId);
         res.json(books);
     } catch (err) {
@@ -24,24 +25,13 @@ exports.getBookById = async (req, res) => {
     }
 };
 
-// exports.createBook = async (req, res) => {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//         return res.status(400).json({errors: errors.array()});
-//     }
-//
-//     try {
-//         const { title, author, description, image, userId } = req.body;
-//         const newBook = await bookService.createBook({ title, author, description, image, userId });
-//         res.status(201).json("Book is created");
-//     } catch (err) {
-//         res.status(500).json({ error: 'Unable to create the book' });
-//     }
-// };
 exports.createBook = async (req, res) => {
     try {
         const { title, author, description, image } = req.body;
-        const newBook = await bookService.createBook({ title, author, description, image });
+        const token = req.header('Authorization')?.split('Bearer ')[1];
+        const userId = jwt.verify(token, 'your_secret_key_here').userId;
+        console.log("userId: ",userId);
+        const newBook = await bookService.createBook({ title, author, description, image, userId });
         res.status(201).json({ message: 'Book is created', newBook });
     } catch (err) {
         console.error(err);
@@ -49,10 +39,7 @@ exports.createBook = async (req, res) => {
     }
 };
 
-
-
-
-exports.updateBook = async (req, res) => {
+    exports.updateBook = async (req, res) => {
     const { title } = req.params;
     const { author, description, image } = req.body;
 
