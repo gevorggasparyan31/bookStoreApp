@@ -20,7 +20,7 @@ exports.getAllUsers = async () => {
 
 exports.createUser = async (userData) => {
     try {
-        const { username, password, email } = userData;
+        const { username, password } = userData;
 
         const candidate = await User.findOne({ username });
         if (candidate) {
