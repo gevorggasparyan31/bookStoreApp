@@ -5,6 +5,10 @@ users are done using JWT, passwords in database are saved in encrypted code.
 ## Start The App
 
 - Run the server:
+  At first install dependencies:
+ ```shell
+    npm install
+```
 ```shell
     npm run start
 ```
