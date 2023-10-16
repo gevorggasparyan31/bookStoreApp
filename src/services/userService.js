@@ -44,7 +44,12 @@ exports.createUser = async (userData) => {
             from: process.env.SENDER,
             to: user.email,
             subject: 'Activate your account',
-            text:`http://localhost:3000/users/activate/${activationLink}`,
+            html: `
+                <p>Dear User,</p>
+                <p>Click the link below to activate your account:</p>
+                <b><a href="http://localhost:3000/users/activate/${activationLink}">Activate Account</a></b>
+                <p>If you have trouble clicking the link, please copy and paste it into your browser's address bar.</p>
+    `
         };
 
         console.log(mailOptions);

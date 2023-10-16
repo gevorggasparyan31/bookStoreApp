@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
     if (token) {
         loadBooks().then(r => {
-            console.log("token is saved in local storage",r)});
+        });
     }
 
     const deleteBook = async (bookTitle) => {
@@ -210,5 +210,41 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+    const getRecommendationsButton = document.getElementById("get-recommendations-button");
+    const bookNameInput = document.getElementById("book-preferences");
+    const recommendationsDiv = document.getElementById("recommendations");
+
+    getRecommendationsButton.addEventListener("click", async () => {
+        const bookName = bookNameInput.value;
+
+        try {
+            const response = await fetch("/books/recommendations", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ prompt: bookName }),
+            });
+
+            if (response.status === 200) {
+                const { recommendations } = await response.json();
+                renderRecommendations(recommendations);
+            } else {
+                recommendationsDiv.innerHTML = "Failed to get recommendations.";
+            }
+        } catch (error) {
+            console.error(error);
+            recommendationsDiv.innerHTML = "An error occurred while fetching recommendations.";
+        }
+    });
+
+    const renderRecommendations = (recommendations) => {
+        recommendationsDiv.innerHTML = `
+        <h3>Recommended Books:</h3>
+        <ul>
+            ${recommendations.slice(0, 5).map(book => `<li>${book}</li>`).join('')}
+        </ul>`;
+    };
 
 });
