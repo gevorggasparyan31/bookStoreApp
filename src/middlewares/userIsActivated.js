@@ -9,7 +9,7 @@ const checkUserActivation = async (req, res, next) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        const decoded = jwt.verify(token, 'your_secret_key_here');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
         const userId = decoded.userId;
 

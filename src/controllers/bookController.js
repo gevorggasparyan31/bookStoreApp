@@ -12,6 +12,23 @@ exports.getAllBooks = async (req, res) => {
     }
 };
 
+exports.getBookRecommendations = async (req, res) => {
+    const { prompt } = req.body;
+
+    console.log("prompt:",req.body)
+    try {
+        const recommendationsText = await bookService.generateBookRecommendations(prompt);
+        const recommendationsArray = recommendationsText
+            .split('\n')
+            .filter(line => line.trim() !== '');
+
+        res.json({ recommendations: recommendationsArray });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while generating recommendations.' });
+    }
+};
+
 exports.getBookById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -29,7 +46,7 @@ exports.createBook = async (req, res) => {
     try {
         const { title, author, description, image } = req.body;
         const token = req.header('Authorization')?.split('Bearer ')[1];
-        const userId = jwt.verify(token, 'your_secret_key_here').userId;
+        const userId = jwt.verify(token, process.env.JWT_SECRET_KEY).userId;
         console.log("userId: ",userId);
         const newBook = await bookService.createBook({ title, author, description, image, userId });
         res.status(201).json({ message: 'Book is created', newBook });
@@ -39,7 +56,7 @@ exports.createBook = async (req, res) => {
     }
 };
 
-    exports.updateBook = async (req, res) => {
+exports.updateBook = async (req, res) => {
     const { title } = req.params;
     const { author, description, image } = req.body;
 
